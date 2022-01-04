@@ -1,6 +1,5 @@
 package com.user.register_user.util;
 
-
 import com.user.register_user.exception.RessourceNotFoundException;
 
 public final class CtrlPreconditions {
@@ -11,5 +10,4 @@ public final class CtrlPreconditions {
         }
         return object;
     }
-
 }

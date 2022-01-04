@@ -1,9 +1,12 @@
 package com.user.register_user.service.impl;
 
 import com.user.register_user.dao.UserRepository;
+import com.user.register_user.exception.RessourceAlreadyExistsException;
+import com.user.register_user.exception.RessourceNotFoundException;
 import com.user.register_user.models.User;
 import com.user.register_user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -17,76 +20,119 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String create(User user) {
+
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(user.getBirthday());
         int user_year_birthday = calendar.get(Calendar.YEAR);
         int year = Calendar.getInstance().get(Calendar.YEAR);
-         if ((year-user_year_birthday) >= 18 && user.getCountry().equals("France")) {
-             userRepository.save(user).getId();
-             return "Utilisateur créer";
+        if ((year - user_year_birthday) >= 18 && user.getCountry().equals("France")) {
+            userRepository.save(user).getId();
+            return "user is created";
         }
-             return "Utilisateur non Créer";
+        return "Only adult French residents are allowed to create an account";
+    }
 
+
+    @Override
+    public List findAll() {
+        return (List) userRepository.findAll();
     }
 
     @Override
-    public List<User> findAll() {
-List<User> liste = new ArrayList<User>();
-userRepository.findAll().forEach(liste::add);
-        return liste;
-    }
-
-    @Override
-    public User findById(String id) {
-        if (userRepository.findById(id).isPresent()){
+    public User findById(String id) throws RessourceNotFoundException {
+        if (userRepository.findById(id).isEmpty()) {
+            throw new RessourceNotFoundException();
+        } else {
             return userRepository.findById(id).get();
-        }else {
-            return null;
         }
     }
 
     @Override
-    public void update(String id, User user) {
-        user.setId(id);
-        userRepository.save(user);
-    }
-
-    @Override
-    public void PartialUpdate(String id, Map<String, Object> updates) {
-        User userToUpdate = userRepository.findById(id).get();
-        for (String key : updates.keySet()) {
-
-            switch (key) {
-                case "userName": {
-                    userToUpdate.setUserName((String) updates.get(key));
-                    break;
-                }
-                case "birthday": {
-                    userToUpdate.setBirthday((Date) updates.get(key));
-                    break;
-                }
-                case "phoneNumber": {
-                    userToUpdate.setPhoneNumber((int) updates.get(key));
-                    break;
-                }
-                case "country": {
-                    userToUpdate.setCountry((String) updates.get(key));
-                    break;
-                }
-                case "gender": {
-                    userToUpdate.setGender((String) updates.get(key));
-                    break;
-                }
+    public String update(String id, User user) {
+        if (userRepository.findById(id).isEmpty()) {
+            throw new RessourceNotFoundException();
+        } else {
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(user.getBirthday());
+            int user_year_birthday = calendar.get(Calendar.YEAR);
+            int year = Calendar.getInstance().get(Calendar.YEAR);
+            if ((year - user_year_birthday) >= 18 && user.getCountry().equals("France")) {
+                user.setId(id);
+                userRepository.save(user);
+                return "user is updated";
             }
+            return " You cant update user. Only adult French residents are allowed to create an account";
         }
+
+    }
+
+
+    @Override
+    public String PartialUpdate(String id, Map<String, Object> updates, User user) {
+        String message = "";
+        if (userRepository.findById(id).isEmpty()) {
+            throw new RessourceNotFoundException();
+        } else {
+            User userToUpdate = userRepository.findById(id).get();
+
+            for (String key : updates.keySet()) {
+                System.out.println("-----------------");
+                System.out.println(updates);
+                System.out.println("-----------------");
+                System.out.println(key);
+                System.out.println("-----------------");
+                System.out.println(updates.get(key));
+                System.out.println("-------------------------------------------------------------------------------------");
+                    switch (key) {
+
+                        case "userName": {
+
+                            userToUpdate.setUserName((String) updates.get(key));
+                            // message = "the name is updated";
+
+                            break;
+                        }
+                        case "birthday": {
+
+                            userToUpdate.setBirthday((Date) updates.get(key));
+                            //  message = "the birthday is updated";
+                            break;
+
+                        }
+                        case "phoneNumber": {
+                            userToUpdate.setPhoneNumber((int) updates.get(key));
+                            // message = "the phone number is updated";
+                            break;
+                        }
+                        case "country": {
+
+                            userToUpdate.setCountry((String) updates.get(key));
+                            //message = "the country is updated";
+                            break;
+                        }
+                        case "gender": {
+                            userToUpdate.setGender((String) updates.get(key));
+                            // message = "the gender is updated";
+                            break;
+                        }
+                    }
+                }
+
+            return message ;
+        }
+
 
     }
 
     @Override
     public String delete(String id) {
-        User userDelete = userRepository.findById(id).get();
-        userRepository.delete(userDelete);
-        return "utilisateur supprimer";
+        if (userRepository.findById(id).isEmpty()) {
+            throw new RessourceNotFoundException();
+        } else {
+            User userDelete = userRepository.findById(id).get();
+            userRepository.delete(userDelete);
+            return "user is deleted";
+        }
     }
 
 
