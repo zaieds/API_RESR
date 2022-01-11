@@ -1,23 +1,25 @@
 package com.user.register_user.service;
 
-import com.user.register_user.exception.RessourceAlreadyExistsException;
 import com.user.register_user.exception.RessourceNotFoundException;
 import com.user.register_user.models.User;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface UserService {
-  public String create(User user) throws RessourceAlreadyExistsException;
+  public String create(User user);
 
-  public List findAll() throws RessourceNotFoundException;
+  public List findAll();
 
- public User findById(String id) throws RessourceNotFoundException;
+ public User findById(Long userId) throws RessourceNotFoundException;
 
-   public String update(String id, User user) throws RessourceNotFoundException;
+   public String update(Long userId, User userDetails)throws RessourceNotFoundException;
 
-    public String PartialUpdate(String id, Map<String, Object> updates, User user) throws RessourceNotFoundException;
+    public String PartialUpdate(Long userId, Map<String, Object> updates) throws RessourceNotFoundException;
+
+   public Map<String, Boolean> delete(Long userId);
 
 
-    public String delete(String id) throws RessourceNotFoundException;
+    ;
 }

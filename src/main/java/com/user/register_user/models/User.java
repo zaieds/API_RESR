@@ -2,12 +2,10 @@ package com.user.register_user.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import lombok.NonNull;
-import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 import java.util.Date;
 
@@ -17,27 +15,57 @@ import java.util.Date;
 public class User {
 
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid",strategy = "uuid")
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(nullable = false)
+    @NotEmpty
     @Size(min = 3, message = "Name must be at least 3 characters")
-    private String UserName;
+    private String userName;
 
-    @Column(nullable = false)
+
+    @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date birthday;
 
 
-    @Column(nullable = false)
+    @NotEmpty
+    @Size(max = 50,message = "Only people born in France can create a count ")
     private String country;
 
+
+    @Pattern(regexp = "(\\+33|0)[0-9]{9}")
     @Column(nullable = true)
-    private int phoneNumber;
+    private String phoneNumber;
 
 
     @Column(nullable = true)
-    private String gender;
+    @Enumerated(EnumType.ORDINAL)
+    private Gender gender;
 
+    public User() {
+    }
+
+    public User(String userName, Date birthday, String country) {
+        this.userName = userName;
+        this.birthday = birthday;
+        this.country = country;
+    }
+    public User(String userName, Date birthday, String country , String phoneNumber, Gender gender) {
+        this.userName = userName;
+        this.birthday = birthday;
+        this.country = country;
+        this.phoneNumber=phoneNumber;
+        this.gender=gender;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userName'" + userName + '\'' +
+                ", birthday=" + birthday +
+                ", country='" + country + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", gender=" + gender +
+                '}';
+    }
 }
