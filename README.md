@@ -14,11 +14,11 @@
   
   -Change Path :
   
-  spring.datasource.url=jdbc:h2:file:C:/Users/a792843/Documents/formation/Spring/register_user/src/main/resources/DataBase/db_users;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE;
+  spring.datasource.url=jdbc:h2:file:C:/Users/a792843/Documents/formation/Spring/register_user/src/main/resources/db_users;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE;
 
   -link Base de donnée : http://localhost:8085/h2-console/
   
-   **JDBC URL: jdbc:h2:file:C:/Users/a792843/Documents/formation/Spring/register_user/src/main/resources/DataBase/db_users
+   **JDBC URL: jdbc:h2:file:C:/Users/a792843/Documents/formation/Spring/register_user/src/main/resources/db_users
   
   **User Name: : sa
   
