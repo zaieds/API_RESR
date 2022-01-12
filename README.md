@@ -41,13 +41,13 @@ mvn spring-boot:run
 
 POST /users
 
-GET /users/{userId}
+GET /users/{id}
 
-PUT /users/{userId}
+PUT /users/{id}
 
-PATCH /users/{userId}
+PATCH /users/{id}
 
-DELETE /users/{userId}
+DELETE /users/{id}
  ```
  
 ## Logiciel et DB utilisés
